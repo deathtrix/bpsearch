@@ -6,6 +6,8 @@ TODO:
     - merge 2 AVL trees
     - Hash key la avl
     - adaugat symspell
+    - schimbat serializare AVL (http://www.geeksforgeeks.org/serialize-deserialize-binary-tree/, https://www.cs.usfca.edu/~brooks/S04classes/cs245/lectures/lecture11.pdf)
+    - adaugat pagina settings - weights indexare, etc.
     - DHT - sharing indexes (hash->ip sau hash->urls)
     - peer protocol (get keyword(s), merge)
 

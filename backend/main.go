@@ -33,11 +33,11 @@ func main() {
 	// go crawler.Start("http://intermod.ro")
 
 	// Run the HTTP server
-	http.HandleFunc("/", handlerRoot)
-	http.HandleFunc("/search/", handlerSearch)
-	http.ListenAndServe(":3333", nil)
+	// http.HandleFunc("/", handlerRoot)
+	// http.HandleFunc("/search/", handlerSearch)
+	// http.ListenAndServe(":3333", nil)
 
-	// testAVL()
+	testAVL()
 }
 
 func handlerRoot(w http.ResponseWriter, r *http.Request) {
