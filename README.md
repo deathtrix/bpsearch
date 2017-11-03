@@ -1,9 +1,5 @@
 TODO:
 -----------
-    - AJAX sa caute in avl pe srv local - Get()
-    - JS - adaugat rows in result din json
-
-    - startup - apelat din main (startup() - loadAvl(), initHTTP())
     - avl values - array[string]
     - indexat pagini (+weight / keyword / url)
     - salvat keywords in avl
@@ -25,7 +21,6 @@ Use:
     - crawler - search: golang web crawler
     - indexer (Bleve, https://github.com/nassor/studies-blevesearch)
     - storage: avl tree
-
 
 Beneficii:
    - ultimele tehnologii
@@ -55,3 +50,7 @@ Beneficii:
    - hash words in db
    - cryptat transferuri intre peers
    - db - word hash - urls
+
+Build:
+    - frontend - electron-packager .
+    - backend - go build man.go
