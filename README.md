@@ -55,5 +55,5 @@ Sell points:
 
 Build:
 -----------
-   - frontend - electron-packager .
-   - backend - go build man.go
+   - frontend: electron-packager .
+   - backend: go build main.go
