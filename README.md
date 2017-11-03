@@ -1,15 +1,18 @@
 TODO:
 -----------
-   - avl values - array[string]
-   - indexat pagini (+weight / keyword / url)
-   - salvat keywords in avl
-   - merge 2 AVL trees
-   - Hash key la avl
-   - adaugat symspell
-   - schimbat serializare AVL (http://www.geeksforgeeks.org/serialize-deserialize-binary-tree/, https://www.cs.usfca.edu/~brooks/S04classes/cs245/lectures/lecture11.pdf)
-   - adaugat pagina settings - weights indexare, etc.
+   - load AVL from disk at startup
+   - AVL values - array[string]
+   - index pages (+weight / keyword / url)
+   - save keywords in AVL
+   - function merge 2 AVL trees
+   - Hash keys in AVL trees (SHA1)
+   - update frontend - show results from AVL
+   - add symspell to search (fuzzy)
+   - change AVL serialization (http://www.geeksforgeeks.org/serialize-deserialize-binary-tree/, https://www.cs.usfca.edu/~brooks/S04classes/cs245/lectures/lecture11.pdf)
+   - add settings page to frontend (split by categories), save settings to disk - indexing weights, etc.
    - DHT - sharing indexes (hash->ip sau hash->urls)
-   - peer protocol (get keyword(s), merge)
+   - peer protocol (functions: get keyword(s), dump)
+   - encrypt peer transfer
 
 Docs:
 -----------
@@ -20,41 +23,35 @@ Docs:
 
 Use:
 -----------
-   - DHT
-   - symspell - handle erori la search (https://github.com/heartszhang/symspell, https://github.com/sajari/fuzzy)
-   - crawler - search: golang web crawler
-   - indexer (Bleve, https://github.com/nassor/studies-blevesearch)
-   - storage: avl tree
+   - DHT (Chord ???)
+   - symspell - handle search errors (https://github.com/heartszhang/symspell, https://github.com/sajari/fuzzy)
+   - crawler
+   - indexer (Bleve, https://github.com/nassor/studies-blevesearch ???)
+   - storage: AVL trees
 
-Beneficii:
+Sell points:
 -----------
-   - ultimele tehnologii
-   - concurent (multi-core), distribuit
+   - concurrent crawler
+   - binary protocol (custom, protobuf ???)
+   - distributed
    - modular
-   - super-fast db - rocksdb/lmdb sau ceva
-   - suport dark web
-   - portal catre web si usor de facut portaluri personale (si pe tor)
-   - separat algoritmul ca sa fie usor de modificat
-   - protocol binar, custom (poate protobuf ???)
-   - super-fast crawler - concurent
-   - sa mearga chiar daca a cazut toata infrastructura (sa depinda de cat mai putine protocoale si infrastructura)
-   - suport ML - distribuit - functionat ceva gen flink/storm ( stream processing ??? ) - nu ai puterea lui google dar poti distribui load-ul si sa ai rezultate asemanatoare
-   - rezistent la caderea nodurilor
-   - rezistent la hacking
-   - algoritm search, ranking - votat printr-un mecanism de consens
-   - extensibil
-   - platforma - posibilitatea sa faci si altceva decat search peste platforma (cam ca la ethereum)
-   - indexat si alte protocoale, nu doar http - ftp, samba, torrent?, etc.
-   - securitate - un nod sa nu poata face rau (inside threat) - poate doar vedea ce se cauta dar trebuie mascat ip-ul si alte date de identificare
-   - limitat resurse folosite
-   - posibilitate sa il pui pe un raspberry si sa il accesezi de acolo
-   - fiecare nod selecteaza ce resurse foloseste, ce protocoale indexeaza si limite (internet, intranet)
-   - sa functioneze pe cat mai multe masini (linux, osx, win, mobile???)
-   - sa fie cat mai usor de folosit
-
-   - hash words in db
-   - cryptat transferuri intre peers
-   - db - word hash - urls
+   - extensibile
+   - separate algoritm to be easy updateable/replaceable
+   - support dark web
+   - portal to web and easy to make personal portals (tor also)
+   - works even if much of the internet infrastructure is down (depends as little as possible on other protocols or infrastructure)
+   - support ML - distributed - works like flink/storm ( stream processing ??? )
+   - resistent to node-loss
+   - resistent to hacking
+   - algorithms for search, ranking - voted by consensus mechanism
+   - platform - possible to build something else than search (see ethereum)
+   - index other protocols, not just http - ftp, samba, torrent?, etc.
+   - security - a node cant do much harm (inside threat) - it can only see what was searched but other data like IP and other identification must be masked
+   - limit available resources for software
+   - option for backend to run on raspberry and access it from there (with a browser)
+   - every node selects what resources it uses, what protocols it indexes and what limits it has (CPU, RAM, internet/intranet/dark)
+   - must work on many environments (linux, osx, win, mobile???)
+   - easy to use
 
 Build:
 -----------
