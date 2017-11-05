@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	avl "./avltree"
+	"./crawler"
 )
 
 type crawl interface {
@@ -28,16 +29,20 @@ func main() {
 	fmt.Printf("BPSearch v1.0.0\n\n")
 
 	// load keywords AVL from disk
+	tree := loadAVLFromDisk()
+	if tree == nil {
+		log.Println("Error: Empty tree")
+	}
 
 	// Start crawling in background
-	// go crawler.Start("http://intermod.ro")
+	crawler.Start("http://jeremywho.com")
 
 	// Run the HTTP server
 	// http.HandleFunc("/", handlerRoot)
 	// http.HandleFunc("/search/", handlerSearch)
 	// http.ListenAndServe(":3333", nil)
 
-	testAVL()
+	// testAVL()
 }
 
 func handlerRoot(w http.ResponseWriter, r *http.Request) {
@@ -57,25 +62,46 @@ func handlerSearch(w http.ResponseWriter, r *http.Request) {
 func testAVL() {
 	tree := avl.NewWithStringComparator()
 
-	tree.Put("1", "xfdsf")
+	// Create AVL tree
+	astr := []string{"a", "bb", "ccc"}
+	tree.Put("1", astr)
 	tree.Put("2", "fdsfb")
-	tree.Put("1", "fdsfa")
 	tree.Put("3", "cfdsf")
 	tree.Put("4", "dfsf")
 	tree.Put("5", "fse")
 	tree.Put("6", "sssf")
-
 	fmt.Println(tree)
 
-	val, _ := tree.Get("4")
+	// Get AVL by key
+	val, _ := tree.Get("1")
 	fmt.Println(val)
 
-	json, _ := tree.ToJSON()
-	fmt.Printf("%+v\n", string(json))
+	// convert to JSON
+	// json, _ := tree.ToJSON()
+	// fmt.Printf("%+v\n", string(json))
 
-	b := avl.Compress(json)
-	avl.Save("out", b.Bytes())
+	// save AVL to disk
+	// b := avl.Compress(json)
+	// avl.Save("out", b.Bytes())
 
-	s := avl.Decompress(b.Bytes())
-	fmt.Println(string(s))
+	// load AVL from disk
+	// b := avl.Load("out")
+	// json := avl.Decompress(b)
+	// err := tree.FromJSON(json)
+	// if err != nil {
+	// 	log.Println(err)
+	// }
+	// fmt.Println(tree)
+}
+
+func loadAVLFromDisk() *avl.Tree {
+	tree := avl.NewWithStringComparator()
+	b := avl.Load("out")
+	json := avl.Decompress(b)
+	err := tree.FromJSON(json)
+	if err != nil {
+		log.Println(err)
+	}
+
+	return tree
 }

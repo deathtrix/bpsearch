@@ -485,3 +485,13 @@ func Save(filename string, b []byte) {
 		log.Panic(err)
 	}
 }
+
+// Load AVL tree from file
+func Load(filename string) []byte {
+	data, err := ioutil.ReadFile(filename)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	return data
+}

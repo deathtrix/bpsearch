@@ -1,15 +1,12 @@
 TODO:
 -----------
-   - load AVL from disk at startup
-   - AVL values - array[string]
-   - index pages (+weight / keyword / url)
-   - save keywords in AVL
-   - function merge 2 AVL trees
-   - Hash keys in AVL trees (SHA1)
+   - save keywords in AVL with hash key (SHA1)
    - update frontend - show results from AVL
+   - refactor indexing algorithm (use trees of tokens and weight rules)
    - add symspell to search (fuzzy)
    - change AVL serialization (http://www.geeksforgeeks.org/serialize-deserialize-binary-tree/, https://www.cs.usfca.edu/~brooks/S04classes/cs245/lectures/lecture11.pdf)
    - add settings page to frontend (split by categories), save settings to disk - indexing weights, etc.
+   - function merge 2 AVL trees
    - DHT - sharing indexes (hash->ip sau hash->urls)
    - peer protocol (functions: get keyword(s), dump)
    - encrypt peer transfer

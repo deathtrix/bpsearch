@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"net/http"
 	"time"
+	"unicode"
 
 	"strings"
 
+	"../indexer"
 	"golang.org/x/net/html"
 )
 
@@ -33,7 +35,7 @@ func processURL(urlProcessor chan string, done chan bool) {
 				visited[url] = true
 				go exploreURL(url, urlProcessor)
 			}
-		case <-time.After(1 * time.Second):
+		case <-time.After(3 * time.Second):
 			fmt.Printf("Explored %d pages\n", len(visited))
 			done <- true
 		}
@@ -52,10 +54,19 @@ func exploreURL(url string, urlProcessor chan string) {
 	defer resp.Body.Close()
 	z := html.NewTokenizer(resp.Body)
 
+	var pageText string
+
 	for {
 		tt := z.Next()
 		if tt == html.ErrorToken {
+			pageText = stripSpaces(pageText)
+			indexer.Start(pageText)
 			return
+		}
+
+		if tt == html.TextToken {
+			t := z.Token()
+			pageText = pageText + t.String()
 		}
 
 		if tt == html.StartTagToken {
@@ -66,16 +77,43 @@ func exploreURL(url string, urlProcessor chan string) {
 					if a.Key == "href" {
 
 						// if link is within jeremywho.com
-						// if strings.HasPrefix(a.Val, "https://jeremywho.com") {
-						if strings.HasPrefix(a.Val, "http") {
+						if strings.HasPrefix(a.Val, "http://jeremywho.com") {
 							urlProcessor <- a.Val
-						} else {
-							urlProcessor <- "http://intermod.ro" + a.Val // TODO: optimize concatenation
 						}
+
+						// crawl every link in page (external links also)
+						// if strings.HasPrefix(a.Val, "http") {
+						// 	urlProcessor <- a.Val
+						// } else {
+						// 	urlProcessor <- "http://intermod.ro" + a.Val // TODO: optimize concatenation
 						// }
 					}
 				}
 			}
 		}
 	}
+}
+
+func stripSpaces(str string) string {
+	var s string
+	r := false
+	for _, el := range str {
+		if !unicode.IsSpace(el) {
+			s = s + string(el)
+			r = true
+		} else {
+			if r {
+				s = s + string(el)
+			}
+			r = false
+		}
+	}
+	return s
+
+	// return strings.Map(func(r rune) rune {
+	// 	if unicode.IsSpace(r) {
+	// 		return -1
+	// 	}
+	// 	return r
+	// }, str)
 }
