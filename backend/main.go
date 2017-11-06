@@ -6,43 +6,57 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 
 	avl "./avltree"
 	"./crawler"
+	"./indexer"
+	"./interfaces"
 )
-
-type crawl interface {
-	Start()
-}
-
-type store interface {
-	Insert()
-	Search()
-}
-
-type index interface {
-	Get()
-	Put()
-}
 
 func main() {
 	fmt.Printf("BPSearch v1.0.0\n\n")
+	start := time.Now()
 
-	// load keywords AVL from disk
+	// load keywords from disk
 	tree := loadAVLFromDisk()
-	if tree == nil {
-		log.Println("Error: Empty tree")
-	}
 
-	// Start crawling in background
-	crawler.Start("http://jeremywho.com")
+	val, _ := tree.Get("one")
+	fmt.Printf("%-v\n", val)
+
+	// Start crawling and indexing in background
+	ch := make(chan string)
+	crawler := new(crawler.Crawler)
+	indexer := new(indexer.Indexer)
+	go startIndexer(indexer, tree, ch)
+	startCrawler("http://jeremywho.com", crawler, ch)
 
 	// Run the HTTP server
+	// fmt.Println("Listening on http://localhost:3333/")
 	// http.HandleFunc("/", handlerRoot)
 	// http.HandleFunc("/search/", handlerSearch)
 	// http.ListenAndServe(":3333", nil)
 
-	// testAVL()
+	// Save keywords to disk
+	saveAVLToDisk(tree)
+
+	elapsed := time.Since(start)
+	fmt.Printf("Time: %s", elapsed)
+}
+
+func startIndexer(indexer interfaces.IndexerInterface, store interfaces.StoreInterface, ch <-chan string) {
+	for {
+		select {
+		case pageText := <-ch:
+			indexer.Start(pageText, store)
+			// case <-time.After(3 * time.Second):
+			// 	break
+		}
+	}
+}
+
+func startCrawler(urlStr string, crawler interfaces.CrawlerInterface, ch chan<- string) {
+	crawler.Start(urlStr, ch)
 }
 
 func handlerRoot(w http.ResponseWriter, r *http.Request) {
@@ -59,41 +73,6 @@ func handlerSearch(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, string(keysJSON))
 }
 
-func testAVL() {
-	tree := avl.NewWithStringComparator()
-
-	// Create AVL tree
-	astr := []string{"a", "bb", "ccc"}
-	tree.Put("1", astr)
-	tree.Put("2", "fdsfb")
-	tree.Put("3", "cfdsf")
-	tree.Put("4", "dfsf")
-	tree.Put("5", "fse")
-	tree.Put("6", "sssf")
-	fmt.Println(tree)
-
-	// Get AVL by key
-	val, _ := tree.Get("1")
-	fmt.Println(val)
-
-	// convert to JSON
-	// json, _ := tree.ToJSON()
-	// fmt.Printf("%+v\n", string(json))
-
-	// save AVL to disk
-	// b := avl.Compress(json)
-	// avl.Save("out", b.Bytes())
-
-	// load AVL from disk
-	// b := avl.Load("out")
-	// json := avl.Decompress(b)
-	// err := tree.FromJSON(json)
-	// if err != nil {
-	// 	log.Println(err)
-	// }
-	// fmt.Println(tree)
-}
-
 func loadAVLFromDisk() *avl.Tree {
 	tree := avl.NewWithStringComparator()
 	b := avl.Load("out")
@@ -104,4 +83,10 @@ func loadAVLFromDisk() *avl.Tree {
 	}
 
 	return tree
+}
+
+func saveAVLToDisk(tree *avl.Tree) {
+	json, _ := tree.ToJSON()
+	b := avl.Compress(json)
+	avl.Save("out", b.Bytes())
 }
