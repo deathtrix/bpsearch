@@ -3,7 +3,7 @@ TODO
    - basic skeleton
       - cum pasez url catre indexer ???
       - struct indexat tree[keyword] = {url1:weight1, url2:weight2} - map[string]int - struct idx {url string, weight int}, []idx ???
-      
+
       - save keywords in AVL with hash key (SHA1)
       - update frontend - show results from Storage (AVL)
       - add symspell to search (fuzzy)
@@ -31,6 +31,12 @@ Docs
    - http://blog.notdot.net/2009/11/Implementing-a-DHT-in-Go-part-1
    - http://cs.brown.edu/courses/cs138/s17/content/projects/chord.pdf
    - https://www.slideshare.net/jsimnz/chord-dht
+   - http://infolab.stanford.edu/~backrub/google.html
+   - https://moz.com/blog/search-engine-algorithm-basics
+   - http://www.ardendertat.com/2011/05/30/how-to-implement-a-search-engine-part-1-create-index/
+   - https://www.elastic.co/guide/en/elasticsearch/guide/current/inverted-index.html
+   - https://en.m.wikipedia.org/wiki/Search_engine_indexing
+   - https://www.google.ro/amp/s/www.maketecheasier.com/how-bittorrent-dht-peer-discovery-works/amp/
 
 Use
 -----
