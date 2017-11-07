@@ -1,9 +1,7 @@
 TODO
 -----
    - basic skeleton
-      - cum pasez url catre indexer ???
-      - struct indexat tree[keyword] = {url1:weight1, url2:weight2} - map[string]int - struct idx {url string, weight int}, []idx ???
-
+      - finish Indexer
       - save keywords in AVL with hash key (SHA1)
       - update frontend - show results from Storage (AVL)
       - add symspell to search (fuzzy)
@@ -16,9 +14,11 @@ TODO
       - peer protocol (functions: get keyword(s), dump)
       - encrypt peer transfer
    - refactor
-      - check for duplicate links in Crawler
       - change AVL serialization (http://www.geeksforgeeks.org/serialize-deserialize-binary-tree/, https://www.cs.usfca.edu/~brooks/S04classes/cs245/lectures/lecture11.pdf)
+      - use Indexer struct instead of map
+      - check for duplicate links in Crawler
       - separate repos - crawler, indexer, storage (AVL)
+      - add tests for crawler, indexer, storage
 
 Docs
 -----
@@ -27,16 +27,32 @@ Docs
    - http://blog.notdot.net/2009/11/Implementing-a-DHT-in-Go-part-2
    - https://github.com/armon/go-chord
    - http://cs.brown.edu/courses/cs138/s17/syllabus.html
-   - https://medium.com/@sent0hil/consistent-hashing-a-guide-go-implementation-fe3421ac3e8f
-   - http://blog.notdot.net/2009/11/Implementing-a-DHT-in-Go-part-1
    - http://cs.brown.edu/courses/cs138/s17/content/projects/chord.pdf
+   - https://medium.com/@sent0hil/consistent-hashing-a-guide-go-implementation-fe3421ac3e8f
    - https://www.slideshare.net/jsimnz/chord-dht
+   - https://blog.savoirfairelinux.com/en-ca/2015/ring-opendht-a-distributed-hash-table/
    - http://infolab.stanford.edu/~backrub/google.html
    - https://moz.com/blog/search-engine-algorithm-basics
    - http://www.ardendertat.com/2011/05/30/how-to-implement-a-search-engine-part-1-create-index/
    - https://www.elastic.co/guide/en/elasticsearch/guide/current/inverted-index.html
    - https://en.m.wikipedia.org/wiki/Search_engine_indexing
    - https://www.google.ro/amp/s/www.maketecheasier.com/how-bittorrent-dht-peer-discovery-works/amp/
+
+Docs headless browser
+-----
+   - https://github.com/moovweb/gokogiri
+   - https://github.com/PuerkitoBio/goquery
+   - https://github.com/k4s/phantomgo
+   - https://github.com/benbjohnson/phantomjs
+   - https://github.com/urturn/go-phantomjs
+   - https://github.com/sourcegraph/webloop
+
+Docs src
+-----
+   - https://github.com/automenta/kelondro
+   - https://github.com/yacy/yacy_search_server/blob/8303e15419e789cad94b94a1d65e00f9627cd5f1/source/net/yacy/search/query/SearchEvent.java
+   - https://github.com/yacy/yacy_search_server/blob/dd9cb06d250d8bbfc798c23ab8779a92018557f1/source/net/yacy/kelondro/data/word/WordReferenceVars.java
+
 
 Use
 -----

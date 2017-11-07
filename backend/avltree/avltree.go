@@ -453,6 +453,23 @@ func output(node *Node, prefix string, isTail bool, str *string) {
 	}
 }
 
+// LoadFromDisk function
+func LoadFromDisk() *Tree {
+	tree := NewWithStringComparator()
+	b := Load("out")
+	json := Decompress(b)
+	tree.FromJSON(json)
+
+	return tree
+}
+
+// SaveToDisk function
+func (t *Tree) SaveToDisk() {
+	json, _ := t.ToJSON()
+	b := Compress(json)
+	Save("out", b.Bytes())
+}
+
 // Compress AVL tree
 func Compress(json []byte) bytes.Buffer {
 	var b bytes.Buffer
@@ -471,6 +488,9 @@ func Compress(json []byte) bytes.Buffer {
 
 // Decompress AVL tree
 func Decompress(data []byte) []byte {
+	if data == nil {
+		return nil
+	}
 	rdata := bytes.NewReader(data)
 	r, _ := gzip.NewReader(rdata)
 	s, _ := ioutil.ReadAll(r)
@@ -490,7 +510,7 @@ func Save(filename string, b []byte) {
 func Load(filename string) []byte {
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
-		log.Panic(err)
+		return nil
 	}
 
 	return data

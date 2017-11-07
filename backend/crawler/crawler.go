@@ -6,19 +6,14 @@ import (
 	"net/http"
 	"net/url"
 	"time"
-	"unicode"
 
 	"strings"
 
 	"golang.org/x/net/html"
 )
 
-// Crawler struct
-type Crawler struct {
-}
-
 // Start crawling
-func (c *Crawler) Start(urlStr string, ch chan<- string) {
+func Start(urlStr string, ch chan<- string) {
 	_, err := url.ParseRequestURI(urlStr)
 	if err != nil {
 		log.Println(err)
@@ -58,25 +53,15 @@ func exploreURL(urlStr string, urlProcessor chan string, ch chan<- string) {
 	resp, err := http.Get(urlStr)
 	if err != nil {
 		log.Println(err)
-		return
 	}
 
 	defer resp.Body.Close()
 	z := html.NewTokenizer(resp.Body)
 
-	var pageText string
-
 	for {
 		tt := z.Next()
 		if tt == html.ErrorToken {
-			pageText = stripSpaces(pageText)
-			ch <- pageText
 			return
-		}
-
-		if tt == html.TextToken {
-			t := z.Token()
-			pageText = pageText + t.String()
 		}
 
 		if tt == html.StartTagToken {
@@ -91,8 +76,9 @@ func exploreURL(urlStr string, urlProcessor chan string, ch chan<- string) {
 						}
 
 						// if link is within jeremywho.com
-						if strings.HasPrefix(a.Val, "http://jeremywho.com") {
+						if strings.HasPrefix(a.Val, "https://jeremywho.com") {
 							urlProcessor <- a.Val
+							ch <- a.Val
 						}
 
 						// crawl every link in page (external links also)
@@ -106,28 +92,4 @@ func exploreURL(urlStr string, urlProcessor chan string, ch chan<- string) {
 			}
 		}
 	}
-}
-
-func stripSpaces(str string) string {
-	var s string
-	r := false
-	for _, el := range str {
-		if !unicode.IsSpace(el) {
-			s = s + string(el)
-			r = true
-		} else {
-			if r {
-				s = s + string(el)
-			}
-			r = false
-		}
-	}
-	return s
-
-	// return strings.Map(func(r rune) rune {
-	// 	if unicode.IsSpace(r) {
-	// 		return -1
-	// 	}
-	// 	return r
-	// }, str)
 }

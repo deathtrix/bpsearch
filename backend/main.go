@@ -11,7 +11,6 @@ import (
 	avl "./avltree"
 	"./crawler"
 	"./indexer"
-	"./interfaces"
 )
 
 func main() {
@@ -19,17 +18,12 @@ func main() {
 	start := time.Now()
 
 	// load keywords from disk
-	tree := loadAVLFromDisk()
-
-	val, _ := tree.Get("one")
-	fmt.Printf("%-v\n", val)
+	tree := avl.LoadFromDisk()
 
 	// Start crawling and indexing in background
 	ch := make(chan string)
-	crawler := new(crawler.Crawler)
-	indexer := new(indexer.Indexer)
-	go startIndexer(indexer, tree, ch)
-	startCrawler("http://jeremywho.com", crawler, ch)
+	go indexer.Start(tree, ch)
+	crawler.Start("https://jeremywho.com", ch)
 
 	// Run the HTTP server
 	// fmt.Println("Listening on http://localhost:3333/")
@@ -37,26 +31,8 @@ func main() {
 	// http.HandleFunc("/search/", handlerSearch)
 	// http.ListenAndServe(":3333", nil)
 
-	// Save keywords to disk
-	saveAVLToDisk(tree)
-
 	elapsed := time.Since(start)
 	fmt.Printf("Time: %s", elapsed)
-}
-
-func startIndexer(indexer interfaces.IndexerInterface, store interfaces.StoreInterface, ch <-chan string) {
-	for {
-		select {
-		case pageText := <-ch:
-			indexer.Start(pageText, store)
-			// case <-time.After(3 * time.Second):
-			// 	break
-		}
-	}
-}
-
-func startCrawler(urlStr string, crawler interfaces.CrawlerInterface, ch chan<- string) {
-	crawler.Start(urlStr, ch)
 }
 
 func handlerRoot(w http.ResponseWriter, r *http.Request) {
@@ -71,22 +47,4 @@ func handlerSearch(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 	fmt.Fprintf(w, string(keysJSON))
-}
-
-func loadAVLFromDisk() *avl.Tree {
-	tree := avl.NewWithStringComparator()
-	b := avl.Load("out")
-	json := avl.Decompress(b)
-	err := tree.FromJSON(json)
-	if err != nil {
-		log.Println(err)
-	}
-
-	return tree
-}
-
-func saveAVLToDisk(tree *avl.Tree) {
-	json, _ := tree.ToJSON()
-	b := avl.Compress(json)
-	avl.Save("out", b.Bytes())
 }
