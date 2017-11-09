@@ -40,12 +40,8 @@ Docs
 
 Docs headless browser
 -----
-   - https://github.com/moovweb/gokogiri
-   - https://github.com/PuerkitoBio/goquery
    - https://github.com/k4s/phantomgo
-   - https://github.com/benbjohnson/phantomjs
-   - https://github.com/urturn/go-phantomjs
-   - https://github.com/sourcegraph/webloop
+   - https://github.com/PuerkitoBio/goquery - misses functions to get element attributes
 
 Docs src
 -----

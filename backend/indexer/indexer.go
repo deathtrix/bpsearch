@@ -9,6 +9,7 @@ import (
 	"unicode"
 
 	"../interfaces"
+	"github.com/k4s/phantomgo"
 )
 
 // Result struct
@@ -102,4 +103,18 @@ func stripSpaces(str string) string {
 	// 	}
 	// 	return r
 	// }, str)
+}
+
+func parseHTML(urlStr string) {
+	p := phantomgo.NewPhantom()
+	jsBytes, err := ioutil.ReadFile("../parse.js")
+	if err != nil {
+		fmt.Println(err)
+	}
+	js := string(jsBytes)
+	js = strings.Replace(js, "<<URL>>", urlStr, -1)
+
+	res, _ := p.Exec(js)
+	output, _ := ioutil.ReadAll(res)
+	fmt.Println(string(output))
 }
