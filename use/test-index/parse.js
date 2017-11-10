@@ -66,15 +66,17 @@ page.open('<<URL>>', function (status) {
             var uniqueWords = {};
             var text = e.textContent.trim();
             // TODO: more complex regex for symbol removal
-            text = text.replace(/[^0-9a-zA-Z \/\\\.@]/g, "");
+            text = text.replace(/[^0-9a-zA-Z \/\\\.@-]/g, "");
             var words = text.split(' ');
-            // TODO - remove empty string - words.splice(words.indexOf(''), 1);
             words.forEach(function (word) {
               word = word.toLowerCase();
-              if (typeof uniqueWords[word] === "undefined") {
-                uniqueWords[word] = 1;
-              } else {
-                uniqueWords[word]++;
+              // remove words with length <= 1
+              if (word.length > 1) {
+                if (typeof uniqueWords[word] === "undefined") {
+                  uniqueWords[word] = 1;
+                } else {
+                  uniqueWords[word]++;
+                }
               }
             });
 
@@ -91,15 +93,21 @@ page.open('<<URL>>', function (status) {
           return elems;
         }
 
-        // TODO - add size, weight and parents to formula
         function calcScores(elems) {
           var uniqueWords = {};
 
           elems.forEach(function (el) {
+            // Calculates weights for properties per text node
+            var sizeScore = el.sz / 12;
+            var weightScore = (el.wg == 'bold') ? 4/3 : 1;
+            var h3Score = (el.parents.indexOf('H3')) ? 4/3 : 1;
+
             each(el.words, function (w, c) {
-              var score = c;
+              // calculate total score / word
+              var score = c * sizeScore * weightScore * h3Score;
+              score = Math.round(score * 100) / 100;
               if (typeof uniqueWords[w] === "undefined") {
-                uniqueWords[w] = c;
+                uniqueWords[w] = score;
               } else {
                 uniqueWords[w] += score;
               }

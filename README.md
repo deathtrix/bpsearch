@@ -1,13 +1,11 @@
 TODO
 -----
-   - basic skeleton
-      - indexer - calculate score (), get formula as parameter from go, save to storage
+   - skeleton
+      - indexer - get formula as parameter from go, save to storage
+      - add settings page to frontend (split by categories), save settings to disk - indexing weights, etc.
       - save keywords in AVL with hash key (SHA1)
       - update frontend - show results from Storage (AVL)
       - add symspell to search (fuzzy)
-   - indexer
-      - add settings page to frontend (split by categories), save settings to disk - indexing weights, etc.
-      - refactor indexing algorithm (use trees of tokens and weight rules), CSS ???
    - P2P
       - function merge 2 AVL trees
       - DHT - sharing indexes (hash->ip sau hash->urls)
@@ -19,6 +17,7 @@ TODO
       - check for duplicate links in Crawler
       - separate repos - crawler, indexer, storage (AVL)
       - add tests for crawler, indexer, storage
+      - merge different forms of the same word ('work', 'works', 'worked', etc.)
 
 Docs
 -----
