@@ -1,7 +1,7 @@
 TODO
 -----
    - basic skeleton
-      - finish Indexer
+      - indexer - calculate score (), get formula as parameter from go, save to storage
       - save keywords in AVL with hash key (SHA1)
       - update frontend - show results from Storage (AVL)
       - add symspell to search (fuzzy)
