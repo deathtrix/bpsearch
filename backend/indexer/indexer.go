@@ -1,6 +1,7 @@
 package indexer
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -33,7 +34,7 @@ func Start(store interfaces.StoreInterface, ch <-chan string) {
 	}
 }
 
-func index(urlStr string, store interfaces.StoreInterface) {
+func getPageContent(urlStr string) map[string]int {
 	resp, err := http.Get(urlStr)
 	if err != nil {
 		log.Println(err)
@@ -44,19 +45,27 @@ func index(urlStr string, store interfaces.StoreInterface) {
 	if err != nil {
 		log.Println(err)
 	}
-
-	// TODO: extract text using headless browser
 	str := string(respBytes)
-
 	cnt := wordCount(str)
-	for word := range cnt {
+	return cnt
+}
+
+func index(urlStr string, store interfaces.StoreInterface) {
+	var scores map[string]int
+	scoresJSON := parseHTML(urlStr)
+	err := json.Unmarshal(scoresJSON, &scores)
+	if err != nil {
+		fmt.Println("error:", err)
+	}
+
+	for word, score := range scores {
 		old, _ := store.Get(word)
 
 		var urlMap = make(map[string]interface{})
 		if old != nil {
 			urlMap = old.(map[string]interface{})
 		}
-		urlMap["url2"] = cnt[word]
+		urlMap[urlStr] = score
 
 		// use Indexer struct - problems with AVL serialization
 		// urlMap := Indexer{}
@@ -66,7 +75,7 @@ func index(urlStr string, store interfaces.StoreInterface) {
 		// urlMap = Indexer{Result{url: "url3", weight: cnt[word]}}
 
 		store.Put(word, urlMap)
-		fmt.Printf("%s - %d\n", word, cnt[word])
+		fmt.Printf("%s - %d\n", word, score)
 	}
 
 	store.SaveToDisk()
@@ -105,7 +114,7 @@ func stripSpaces(str string) string {
 	// }, str)
 }
 
-func parseHTML(urlStr string) {
+func parseHTML(urlStr string) []byte {
 	p := phantomgo.NewPhantom()
 	jsBytes, err := ioutil.ReadFile("../parse.js")
 	if err != nil {
@@ -123,5 +132,5 @@ func parseHTML(urlStr string) {
 
 	res, _ := p.Exec(js)
 	output, _ := ioutil.ReadAll(res)
-	fmt.Println(string(output))
+	return output
 }
