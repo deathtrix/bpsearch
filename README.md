@@ -1,7 +1,7 @@
 TODO
 -----
    - skeleton
-      - indexer - weights - const, replace weights from GO, save to storage
+      - indexer - save to storage
       - add settings page to frontend (split by categories), save settings to disk - indexing weights, etc.
       - save keywords in AVL with hash key (SHA1)
       - update frontend - show results from Storage (AVL)

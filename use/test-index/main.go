@@ -24,7 +24,13 @@ func main() {
 	js = strings.Replace(js, "<<H4_WEIGHT>>", "4/3", -1)
 	js = strings.Replace(js, "<<NRP_WEIGHT>>", "2", -1)
 
-	res, _ := p.Exec(js)
-	output, _ := ioutil.ReadAll(res)
+	res, err := p.Exec(js)
+	if err != nil {
+		fmt.Println(err)
+	}
+	output, err := ioutil.ReadAll(res)
+	if err != nil {
+		fmt.Println(err)
+	}
 	fmt.Println(string(output))
 }
