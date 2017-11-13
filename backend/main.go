@@ -9,6 +9,7 @@ import (
 	"time"
 
 	avl "./avltree"
+	"./config"
 	"./crawler"
 	"./indexer"
 )
@@ -16,6 +17,9 @@ import (
 func main() {
 	fmt.Printf("BPSearch v1.0.0\n\n")
 	start := time.Now()
+
+	// load settings
+	settings := config.Load()
 
 	// load keywords from disk
 	tree := avl.LoadFromDisk()

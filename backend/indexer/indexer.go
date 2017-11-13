@@ -9,6 +9,7 @@ import (
 	"strings"
 	"unicode"
 
+	"../config"
 	"../interfaces"
 	"github.com/k4s/phantomgo"
 )
@@ -55,7 +56,7 @@ func index(urlStr string, store interfaces.StoreInterface) {
 	scoresJSON := parseHTML(urlStr)
 	err := json.Unmarshal(scoresJSON, &scores)
 	if err != nil {
-		fmt.Println("error:", err)
+		log.Println(err)
 	}
 
 	for word, score := range scores {
@@ -115,20 +116,32 @@ func stripSpaces(str string) string {
 }
 
 func parseHTML(urlStr string) []byte {
+	// load settings
+	settings := config.Load()
+
+	// TODO: remove after settings page in electron
+	settings["SIZE_WEIGHT"] = "12"
+	settings["BOLD_WEIGHT"] = "4/3"
+	settings["H1_WEIGHT"] = "2"
+	settings["H2_WEIGHT"] = "5/3"
+	settings["H3_WEIGHT"] = "4/3"
+	settings["H4_WEIGHT"] = "4/3"
+	settings["NRP_WEIGHT"] = "2"
+
 	p := phantomgo.NewPhantom()
 	jsBytes, err := ioutil.ReadFile("../parse.js")
 	if err != nil {
 		fmt.Println(err)
 	}
 	js := string(jsBytes)
-	js = strings.Replace(js, "<<URL>>", "http://www.intermod.ro", -1)
-	js = strings.Replace(js, "<<SIZE_WEIGHT>>", "12", -1)
-	js = strings.Replace(js, "<<BOLD_WEIGHT>>", "4/3", -1)
-	js = strings.Replace(js, "<<H1_WEIGHT>>", "2", -1)
-	js = strings.Replace(js, "<<H2_WEIGHT>>", "5/3", -1)
-	js = strings.Replace(js, "<<H3_WEIGHT>>", "4/3", -1)
-	js = strings.Replace(js, "<<H4_WEIGHT>>", "4/3", -1)
-	js = strings.Replace(js, "<<NRP_WEIGHT>>", "2", -1)
+	js = strings.Replace(js, "<<URL>>", urlStr, -1)
+	js = strings.Replace(js, "<<SIZE_WEIGHT>>", settings["SIZE_WEIGHT"], -1)
+	js = strings.Replace(js, "<<BOLD_WEIGHT>>", settings["BOLD_WEIGHT"], -1)
+	js = strings.Replace(js, "<<H1_WEIGHT>>", settings["H1_WEIGHT"], -1)
+	js = strings.Replace(js, "<<H2_WEIGHT>>", settings["H2_WEIGHT"], -1)
+	js = strings.Replace(js, "<<H3_WEIGHT>>", settings["H3_WEIGHT"], -1)
+	js = strings.Replace(js, "<<H4_WEIGHT>>", settings["H4_WEIGHT"], -1)
+	js = strings.Replace(js, "<<NRP_WEIGHT>>", settings["NRP_WEIGHT"], -1)
 
 	res, _ := p.Exec(js)
 	output, _ := ioutil.ReadAll(res)

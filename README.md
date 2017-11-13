@@ -1,12 +1,14 @@
 TODO
 -----
-   - skeleton
-      - indexer - save to storage
-      - add settings page to frontend (split by categories), save settings to disk - indexing weights, etc.
-      - save keywords in AVL with hash key (SHA1)
+   - local
+      - add settings page to frontend (split by categories), save settings to disk - indexing weights
+      - remove Indexer parseHTML() - hardcodings
+      - change AVL serialization (http://www.geeksforgeeks.org/serialize-deserialize-binary-tree/, https://www.cs.usfca.edu/~brooks/S04classes/cs245/lectures/lecture11.pdf)
+      - use Indexer struct instead of map
       - update frontend - show results from Storage (AVL)
+      - save keywords in AVL with hash key (SHA1), electron - sha1(keyword) before sending to webserver
       - add symspell to search (fuzzy)
-   - tunnel HTTP
+   - search tunnel
       - nginx reverse proxy for go webserver
       - serve static files from electron
       - modify static files address and port to access proxy
@@ -16,12 +18,10 @@ TODO
       - peer protocol (functions: get keyword(s), dump)
       - encrypt peer transfer
    - refactor
-      - change AVL serialization (http://www.geeksforgeeks.org/serialize-deserialize-binary-tree/, https://www.cs.usfca.edu/~brooks/S04classes/cs245/lectures/lecture11.pdf)
-      - use Indexer struct instead of map
       - check for duplicate links in Crawler
+      - merge different forms of the same word ('work', 'works', 'worked', etc.)
       - separate repos - crawler, indexer, storage (AVL)
       - add tests for crawler, indexer, storage
-      - merge different forms of the same word ('work', 'works', 'worked', etc.)
 
 Docs
 -----
