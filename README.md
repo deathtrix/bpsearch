@@ -1,7 +1,7 @@
 TODO
 -----
    - local
-      - add settings page to frontend (split by categories), save settings to disk - indexing weights
+      - settings - finish config save, save with ajax (dont change page), load defaults (ajax)
       - remove Indexer parseHTML() - hardcodings
       - change AVL serialization (http://www.geeksforgeeks.org/serialize-deserialize-binary-tree/, https://www.cs.usfca.edu/~brooks/S04classes/cs245/lectures/lecture11.pdf)
       - use Indexer struct instead of map

@@ -21,6 +21,14 @@ func Load() map[string]string {
 	return config
 }
 
+// LoadJSON settings from disk as JSON
+func LoadJSON() string {
+	b := loadFromDisk("settings")
+	jsonText := decompress(b)
+
+	return string(jsonText)
+}
+
 // Save settings to disk
 func Save(config map[string]string) {
 	b, err := json.Marshal(config)

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <title>BPSearch settings</title>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="./styles.css">
+
+  <!-- Scripts -->
+  <script>
+    delete module.exports
+  </script>
+  <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+</head>
+
+<body>
+  <div id="container" class="container-fluid">
+
+    <div class="row pull-right">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <a href="index.html">Search</a>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <h3 class="hash-heading">Settings</h3>
+        <form action="http://localhost:3333/config-save/" method="POST">
+            <fieldset class="form-group">
+            <legend>Weights</legend>
+            <label for="size-weight">Size Weight:</label>
+            <input type="text" id="size-weight" class="form-control text-input" /><br>
+
+            <label for="bold-weight">Bold Weight:</label>
+            <input type="text" id="bold-weight" class="form-control text-input" /><br>
+
+            <label for="h1-weight">H1 Weight:</label>
+            <input type="text" id="h1-weight" class="form-control text-input" /><br>
+
+            <label for="h2-weight">H2 Weight:</label>
+            <input type="text" id="h2-weight" class="form-control text-input" /><br>
+
+            <label for="h3-weight">H3 Weight:</label>
+            <input type="text" id="h3-weight" class="form-control text-input" /><br>
+            
+            <label for="h4-weight">H4 Weight:</label>
+            <input type="text" id="h4-weight" class="form-control text-input" /><br>
+
+            <label for="nrp-weight">NRP Weight:</label>
+            <input type="text" id="nrp-weight" class="form-control text-input" /><br>
+
+            <input type="submit" value="Save">
+            </fieldset>
+        </form>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        &nbsp;
+      </div>
+    </div>
+
+    <div id="result"></div>  
+
+  </div>
+</body>
+
+</html>
