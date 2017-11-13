@@ -3,6 +3,14 @@ var page = require('webpage').create(),
 page.settings.userAgent = 'Mozilla/5.0+(compatible;+Baiduspider/2.0;++http://www.baidu.com/search/spider.html)';
 phantom.cookiesEnabled = true;
 
+const sizeWeight = <<SIZE_WEIGHT>>; // 12
+const boldWeight = <<BOLD_WEIGHT>>; // 4/3
+const h1Weight = <<H1_WEIGHT>>;     // 2
+const h2Weight = <<H2_WEIGHT>>;     // 5/3
+const h3Weight = <<H3_WEIGHT>>;     // 4/3
+const h4Weight = <<H4_WEIGHT>>;     // 4/3
+const nrpWeight = <<NRP_WEIGHT>>;   // 2
+
 page.open('<<URL>>', function (status) {
   page.includeJs('https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js',
     function() {
@@ -98,13 +106,18 @@ page.open('<<URL>>', function (status) {
 
           elems.forEach(function (el) {
             // Calculates weights for properties per text node
-            var sizeScore = el.sz / 12;
-            var weightScore = (el.wg == 'bold') ? 4/3 : 1;
-            var h3Score = (el.parents.indexOf('H3')) ? 4/3 : 1;
+            var sizeScore = el.sz / sizeWeight;
+            var weightScore = (el.wg == 'bold') ? boldWeight : 1;
+            var h1Score = (el.parents.indexOf('H1')) ? h1Weight : 1;
+            var h2Score = (el.parents.indexOf('H2')) ? h2Weight : 1;
+            var h3Score = (el.parents.indexOf('H3')) ? h3Weight : 1;
+            var h4Score = (el.parents.indexOf('H4')) ? h4Weight : 1;
+            var nrpScore = nrpWeight / el.parents.length;
 
             each(el.words, function (w, c) {
               // calculate total score / word
-              var score = c * sizeScore * weightScore * h3Score;
+              var score = c * sizeScore * weightScore * h1Score *
+                      h2Score * h3Score * h4Score * nrpScore;
               score = Math.round(score * 100) / 100;
               if (typeof uniqueWords[w] === "undefined") {
                 uniqueWords[w] = score;

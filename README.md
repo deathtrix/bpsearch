@@ -1,11 +1,15 @@
 TODO
 -----
    - skeleton
-      - indexer - get formula as parameter from go, save to storage
+      - indexer - weights - const, replace weights from GO, save to storage
       - add settings page to frontend (split by categories), save settings to disk - indexing weights, etc.
       - save keywords in AVL with hash key (SHA1)
       - update frontend - show results from Storage (AVL)
       - add symspell to search (fuzzy)
+   - tunnel HTTP
+      - nginx reverse proxy for go webserver
+      - serve static files from electron
+      - modify static files address and port to access proxy
    - P2P
       - function merge 2 AVL trees
       - DHT - sharing indexes (hash->ip sau hash->urls)
