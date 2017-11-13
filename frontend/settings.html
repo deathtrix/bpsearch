@@ -13,7 +13,21 @@
   <script>
     delete module.exports
   </script>
-  <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.js"></script>
+  <script type="text/javascript">
+    function saveSettings() {
+        // document.getElementById("form-settings").submit();
+        var url = "http://localhost:3333/config-save/";
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: $("#idForm").serialize()
+        });
+
+        return false;
+    }
+  </script>
 </head>
 
 <body>
@@ -28,7 +42,7 @@
     <div class="row">
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <h3 class="hash-heading">Settings</h3>
-        <form action="http://localhost:3333/config-save/" method="POST">
+        <form id="form-settings" action="http://localhost:3333/config-save/" method="POST">
             <fieldset class="form-group">
             <legend>Weights</legend>
             <label for="size-weight">Size Weight:</label>
@@ -52,7 +66,7 @@
             <label for="nrp-weight">NRP Weight:</label>
             <input type="text" id="nrp-weight" class="form-control text-input" /><br>
 
-            <input type="submit" value="Save">
+            <input type="button" value="Save" onclick="saveSettings()">
             </fieldset>
         </form>
       </div>

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"compress/gzip"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 )
@@ -24,7 +25,9 @@ func Load() map[string]string {
 // LoadJSON settings from disk as JSON
 func LoadJSON() string {
 	b := loadFromDisk("settings")
+	fmt.Printf("%-v", b)
 	jsonText := decompress(b)
+	fmt.Printf("%s", jsonText)
 
 	return string(jsonText)
 }
@@ -60,8 +63,14 @@ func decompress(data []byte) []byte {
 		return nil
 	}
 	rdata := bytes.NewReader(data)
-	r, _ := gzip.NewReader(rdata)
-	s, _ := ioutil.ReadAll(r)
+	r, err := gzip.NewReader(rdata)
+	if err != nil {
+		log.Println(err)
+	}
+	s, err := ioutil.ReadAll(r)
+	if err != nil {
+		log.Println(err)
+	}
 
 	return s
 }
@@ -76,6 +85,7 @@ func saveToDisk(filename string, b []byte) {
 func loadFromDisk(filename string) []byte {
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
+		log.Println(err)
 		return nil
 	}
 
