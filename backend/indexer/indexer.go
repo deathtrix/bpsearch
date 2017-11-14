@@ -16,12 +16,12 @@ import (
 
 // type Score struct {
 // 	url   string
-// 	score float32
+// 	score float64
 // }
 // type Scores []Score
 
 // Scores struct
-type Scores map[string]float32
+type Scores map[string]float64
 
 // Keymap struct
 type Keymap map[string]Scores
@@ -55,7 +55,7 @@ func getPageContent(urlStr string) map[string]int {
 }
 
 func index(urlStr string, store interfaces.StoreInterface) {
-	var scores map[string]float32
+	var scores map[string]float64
 	scoresJSON := parseHTML(urlStr)
 	err := json.Unmarshal(scoresJSON, &scores)
 	if err != nil {

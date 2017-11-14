@@ -1,8 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
+	"sort"
 	"strings"
 	"time"
 
@@ -22,7 +25,7 @@ func main() {
 
 	// keywordStore, _ := tree.Get("soy")
 	// keyword, _ := keywordStore.(map[string]interface{})
-	// score := keyword["http://www.intermod.ro"].(float32)
+	// score := keyword["http://www.intermod.ro"].(float64)
 	// fmt.Printf("score: %-v\n", score)
 
 	// keywordStore, _ := tree.Get("soy")
@@ -62,8 +65,10 @@ func handlerSearch(w http.ResponseWriter, r *http.Request) {
 	keyString := r.URL.Query().Get("keywords")
 	keywords := strings.Split(keyString, " ")
 
-	s := ""
+	// build list of pages that contain the keywords and add scores
 	pages := map[string]float64{}
+	hack := map[float64]string{}
+	pagesKeys := []float64{}
 	for _, keyword := range keywords {
 		keywordStore, _ := tree.Get(keyword)
 		urls, _ := keywordStore.(map[string]interface{})
@@ -73,14 +78,24 @@ func handlerSearch(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// TODO: sort pages by score
-	// sort.Sort(ByLength(elems))
-
-	for k := range pages {
-		s += fmt.Sprintf("<a href=\"%s\">%s</a><br>", k, k)
+	// sort pages by score
+	pagesNames := []string{}
+	for k, v := range pages {
+		hack[v] = k
+		pagesKeys = append(pagesKeys, v)
+	}
+	sort.Float64s(pagesKeys)
+	for _, val := range pagesKeys {
+		pagesNames = append(pagesNames, hack[val])
 	}
 
-	fmt.Fprintf(w, s)
+	// encode response as JSON
+	b, err := json.Marshal(pagesNames)
+	if err != nil {
+		log.Println(err)
+	}
+
+	fmt.Fprintf(w, string(b))
 }
 
 func handlerConfigSave(w http.ResponseWriter, r *http.Request) {

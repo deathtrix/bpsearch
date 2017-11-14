@@ -1,9 +1,6 @@
 TODO
 -----
    - local
-      - sort pages
-      - float32 - peste tot, sters out*
-      - update frontend - show results from Storage (AVL)
       - add symspell to search (fuzzy)
       - save keywords in AVL with hash key (SHA1), electron - sha1(keyword) before searching (on server /search/)
    - search tunnel
