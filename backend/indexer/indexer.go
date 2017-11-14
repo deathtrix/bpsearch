@@ -119,15 +119,6 @@ func parseHTML(urlStr string) []byte {
 	// load settings
 	settings := config.Load()
 
-	// TODO: remove after settings page in electron
-	settings["SIZE_WEIGHT"] = "12"
-	settings["BOLD_WEIGHT"] = "4/3"
-	settings["H1_WEIGHT"] = "2"
-	settings["H2_WEIGHT"] = "5/3"
-	settings["H3_WEIGHT"] = "4/3"
-	settings["H4_WEIGHT"] = "4/3"
-	settings["NRP_WEIGHT"] = "2"
-
 	p := phantomgo.NewPhantom()
 	jsBytes, err := ioutil.ReadFile("../parse.js")
 	if err != nil {

@@ -18,14 +18,31 @@
     function saveSettings() {
         // document.getElementById("form-settings").submit();
         var url = "http://localhost:3333/config-save/";
+        var data = $("#form-settings").serialize();
+        var data = data.replace(/(.*?)(=[^=&]*)/ig, function(v, a, b) { return a.replace(/-/i, "_").toUpperCase()+b; });
 
         $.ajax({
             type: "POST",
             url: url,
-            data: $("#idForm").serialize()
+            data: data
         });
 
         return false;
+    }
+
+    window.onload = function () {
+        var url = "http://localhost:3333/config-load/";
+
+        $.ajax({
+            type: "GET",
+            url: url
+        }).done(function(data) {
+            var config = JSON.parse(data);
+            for (atr in config) {
+                var name = atr.replace(/_/, "-").toLowerCase();
+                document.getElementById(name).value = config[atr];
+            }
+        });
     }
   </script>
 </head>
@@ -46,25 +63,25 @@
             <fieldset class="form-group">
             <legend>Weights</legend>
             <label for="size-weight">Size Weight:</label>
-            <input type="text" id="size-weight" class="form-control text-input" /><br>
+            <input type="text" name="size-weight" id="size-weight" class="form-control text-input" /><br>
 
             <label for="bold-weight">Bold Weight:</label>
-            <input type="text" id="bold-weight" class="form-control text-input" /><br>
+            <input type="text" name="bold-weight" id="bold-weight" class="form-control text-input" /><br>
 
             <label for="h1-weight">H1 Weight:</label>
-            <input type="text" id="h1-weight" class="form-control text-input" /><br>
+            <input type="text" name="h1-weight" id="h1-weight" class="form-control text-input" /><br>
 
             <label for="h2-weight">H2 Weight:</label>
-            <input type="text" id="h2-weight" class="form-control text-input" /><br>
+            <input type="text" name="h2-weight" id="h2-weight" class="form-control text-input" /><br>
 
             <label for="h3-weight">H3 Weight:</label>
-            <input type="text" id="h3-weight" class="form-control text-input" /><br>
+            <input type="text" name="h3-weight" id="h3-weight" class="form-control text-input" /><br>
             
             <label for="h4-weight">H4 Weight:</label>
-            <input type="text" id="h4-weight" class="form-control text-input" /><br>
+            <input type="text" name="h4-weight" id="h4-weight" class="form-control text-input" /><br>
 
             <label for="nrp-weight">NRP Weight:</label>
-            <input type="text" id="nrp-weight" class="form-control text-input" /><br>
+            <input type="text" name="nrp-weight" id="nrp-weight" class="form-control text-input" /><br>
 
             <input type="button" value="Save" onclick="saveSettings()">
             </fieldset>

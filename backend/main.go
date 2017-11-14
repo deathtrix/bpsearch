@@ -27,7 +27,7 @@ func main() {
 	// crawler.Start("https://jeremywho.com", ch)
 
 	// Run the HTTP server
-	// fmt.Println("Listening on http://localhost:3333/")
+	fmt.Println("Listening on http://localhost:3333/")
 	http.HandleFunc("/", handlerRoot)
 	http.HandleFunc("/search/", handlerSearch)
 	http.HandleFunc("/config-save/", handlerConfigSave)
@@ -58,6 +58,7 @@ func handlerConfigSave(w http.ResponseWriter, r *http.Request) {
 	for k, v := range r.Form {
 		settings[k] = strings.Join(v, "")
 	}
+
 	config.Save(settings)
 }
 
