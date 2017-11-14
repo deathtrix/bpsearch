@@ -14,14 +14,17 @@ import (
 	"github.com/k4s/phantomgo"
 )
 
-// Result struct
-type Result struct {
-	url    string
-	weight int
-}
+// type Score struct {
+// 	url   string
+// 	score float32
+// }
+// type Scores []Score
 
-// Indexer struct
-type Indexer []Result
+// Scores struct
+type Scores map[string]float32
+
+// Keymap struct
+type Keymap map[string]Scores
 
 // Start indexing the text
 func Start(store interfaces.StoreInterface, ch <-chan string) {
@@ -52,31 +55,31 @@ func getPageContent(urlStr string) map[string]int {
 }
 
 func index(urlStr string, store interfaces.StoreInterface) {
-	var scores map[string]int
+	var scores map[string]float32
 	scoresJSON := parseHTML(urlStr)
 	err := json.Unmarshal(scoresJSON, &scores)
 	if err != nil {
 		log.Println(err)
 	}
+	fmt.Printf("%-v\n", scores)
 
 	for word, score := range scores {
 		old, _ := store.Get(word)
 
-		var urlMap = make(map[string]interface{})
-		if old != nil {
-			urlMap = old.(map[string]interface{})
+		// var urlMap = make(map[string]interface{})
+		// if old != nil {
+		// 	urlMap = old.(map[string]interface{})
+		// }
+		// urlMap[urlStr] = score
+
+		// use structs - problems with AVL serialization
+		urlMap := Scores{}
+		if t, ok := old.(Scores); ok {
+			urlMap = t
 		}
 		urlMap[urlStr] = score
 
-		// use Indexer struct - problems with AVL serialization
-		// urlMap := Indexer{}
-		// if t, ok := old.(Indexer); ok {
-		// 	urlMap = t
-		// }
-		// urlMap = Indexer{Result{url: "url3", weight: cnt[word]}}
-
 		store.Put(word, urlMap)
-		fmt.Printf("%s - %d\n", word, score)
 	}
 
 	store.SaveToDisk()
@@ -120,7 +123,7 @@ func parseHTML(urlStr string) []byte {
 	settings := config.Load()
 
 	p := phantomgo.NewPhantom()
-	jsBytes, err := ioutil.ReadFile("../parse.js")
+	jsBytes, err := ioutil.ReadFile("parse.js")
 	if err != nil {
 		fmt.Println(err)
 	}

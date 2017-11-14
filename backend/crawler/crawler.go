@@ -76,7 +76,7 @@ func exploreURL(urlStr string, urlProcessor chan string, ch chan<- string) {
 						}
 
 						// if link is within jeremywho.com
-						if strings.HasPrefix(a.Val, "https://jeremywho.com") {
+						if strings.HasPrefix(a.Val, "http://www.intermod.ro") {
 							urlProcessor <- a.Val
 							ch <- a.Val
 						}

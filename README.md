@@ -1,11 +1,11 @@
 TODO
 -----
    - local
-      - change AVL serialization (http://www.geeksforgeeks.org/serialize-deserialize-binary-tree/, https://www.cs.usfca.edu/~brooks/S04classes/cs245/lectures/lecture11.pdf)
-      - use Indexer struct instead of map
+      - sort pages
+      - float32 - peste tot, sters out*
       - update frontend - show results from Storage (AVL)
-      - save keywords in AVL with hash key (SHA1), electron - sha1(keyword) before searching (on server /search/)
       - add symspell to search (fuzzy)
+      - save keywords in AVL with hash key (SHA1), electron - sha1(keyword) before searching (on server /search/)
    - search tunnel
       - nginx reverse proxy for go webserver
       - serve static files from electron
@@ -16,6 +16,7 @@ TODO
       - peer protocol (functions: get keyword(s), dump)
       - encrypt peer transfer
    - refactor
+      - change AVL serialization (http://www.geeksforgeeks.org/serialize-deserialize-binary-tree/, https://www.cs.usfca.edu/~brooks/S04classes/cs245/lectures/lecture11.pdf)
       - check for duplicate links in Crawler
       - merge different forms of the same word ('work', 'works', 'worked', etc.)
       - separate repos - crawler, indexer, storage (AVL)
