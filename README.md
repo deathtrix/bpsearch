@@ -1,10 +1,10 @@
 TODO
 -----
    - local
-      - add symspell to search (fuzzy)
+      - add symspell to search - fuzzy.Suggestions() - https://github.com/sajari/fuzzy
       - save keywords in AVL with hash key (SHA1), electron - sha1(keyword) before searching (on server /search/)
    - P2P
-      - DHT - test multiple peers, choose, add to project (subdir dht)
+      - DHT - test multiple peers, choose, add to project (subdir dht), integrate in main.go
       - replace storage with AVL
    - search tunnel
       - nginx reverse proxy for go webserver
@@ -13,7 +13,7 @@ TODO
    - refactor
       - change AVL serialization (http://www.geeksforgeeks.org/serialize-deserialize-binary-tree/, https://www.cs.usfca.edu/~brooks/S04classes/cs245/lectures/lecture11.pdf)
       - check for duplicate links in Crawler
-      - merge different forms of the same word ('work', 'works', 'worked', etc.)
+      - merge different forms of the same word ('work', 'works', 'worked', etc.) - use fuzzy.SpellCheck()
       - separate repos - crawler, indexer, storage (AVL)
       - encrypt peer transfer
       - add tests for crawler, indexer, storage
@@ -53,7 +53,7 @@ Docs src
 Use
 -----
    - DHT (Chord ???)
-   - symspell - handle search errors (https://github.com/heartszhang/symspell, https://github.com/sajari/fuzzy)
+   - symspell - handle search errors (https://github.com/sajari/fuzzy)
    - crawler
    - indexer (Bleve, https://github.com/nassor/studies-blevesearch ???)
    - storage: AVL trees
