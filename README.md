@@ -3,14 +3,13 @@ TODO
    - local
       - add symspell to search (fuzzy)
       - save keywords in AVL with hash key (SHA1), electron - sha1(keyword) before searching (on server /search/)
+   - P2P
+      - DHT - test multiple peers, choose, add to project (subdir dht)
+      - replace storage with AVL
    - search tunnel
       - nginx reverse proxy for go webserver
       - serve static files from electron
       - modify static files address and port to access proxy
-   - P2P
-      - function merge 2 AVL trees
-      - DHT
-      - replace storage with AVL
    - refactor
       - change AVL serialization (http://www.geeksforgeeks.org/serialize-deserialize-binary-tree/, https://www.cs.usfca.edu/~brooks/S04classes/cs245/lectures/lecture11.pdf)
       - check for duplicate links in Crawler
