@@ -9,14 +9,14 @@ TODO
       - modify static files address and port to access proxy
    - P2P
       - function merge 2 AVL trees
-      - DHT - sharing indexes (hash->ip sau hash->urls)
-      - peer protocol (functions: get keyword(s), dump)
-      - encrypt peer transfer
+      - DHT
+      - replace storage with AVL
    - refactor
       - change AVL serialization (http://www.geeksforgeeks.org/serialize-deserialize-binary-tree/, https://www.cs.usfca.edu/~brooks/S04classes/cs245/lectures/lecture11.pdf)
       - check for duplicate links in Crawler
       - merge different forms of the same word ('work', 'works', 'worked', etc.)
       - separate repos - crawler, indexer, storage (AVL)
+      - encrypt peer transfer
       - add tests for crawler, indexer, storage
 
 Docs
@@ -24,7 +24,6 @@ Docs
    - http://www.yacy-websearch.net/wiki/index.php/En:FAQ
    - http://blog.notdot.net/2009/11/Implementing-a-DHT-in-Go-part-1
    - http://blog.notdot.net/2009/11/Implementing-a-DHT-in-Go-part-2
-   - https://github.com/armon/go-chord
    - http://cs.brown.edu/courses/cs138/s17/syllabus.html
    - http://cs.brown.edu/courses/cs138/s17/content/projects/chord.pdf
    - https://medium.com/@sent0hil/consistent-hashing-a-guide-go-implementation-fe3421ac3e8f
@@ -36,6 +35,9 @@ Docs
    - https://www.elastic.co/guide/en/elasticsearch/guide/current/inverted-index.html
    - https://en.m.wikipedia.org/wiki/Search_engine_indexing
    - https://www.google.ro/amp/s/www.maketecheasier.com/how-bittorrent-dht-peer-discovery-works/amp/
+   - https://github.com/r-medina/gmaj
+   - https://github.com/prettymuchbryce/kademlia
+   - https://github.com/nictuku/dht
 
 Docs headless browser
 -----
