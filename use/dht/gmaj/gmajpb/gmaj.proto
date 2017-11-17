@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+package gmajpb;
+
+// GMaj is the public API for the chord DHT.
+service GMaj {
+    // GetID returns the ID of the node.
+    rpc GetID(GetIDRequest) returns (GetIDResponse);
+    // Locate finds where a key belongs.
+    rpc Locate(LocateRequest) returns (LocateResponse);
+    // Get returns the value in Chord ring for the given key.
+    rpc Get(GetRequest) returns (GetResponse);
+    // Put writes a key value pair to the Chord ring.
+    rpc Put(PutRequest) returns (PutResponse);
+}
+
+// Node contains a node ID and address.
+message Node {
+    bytes id = 1;
+    string addr = 2;
+}
+
+message GetIDRequest {}
+
+message GetIDResponse {
+    bytes id = 1;
+}
+
+message LocateRequest {
+    string key = 1;
+}
+
+message LocateResponse {
+    Node node = 1;
+}
+
+message GetRequest {
+    string key = 1;
+}
+
+message GetResponse {
+    bytes value = 1;
+}
+
+message PutRequest {
+    string key = 1;
+    bytes value = 2;
+}
+
+message PutResponse {}
+
+// for chord api
+
+message TransferKeysReq {
+    bytes from_id = 1;
+    Node to_node = 2;
+}
+
+message MT {}
+
+message KeyVal {
+    string key = 1;
+    bytes val = 2;
+}
+
+message ID {
+    bytes id = 1;
+}
+
+message Key {
+    string key = 1;
+}
+
+message Val {
+    bytes val = 1;
+}
