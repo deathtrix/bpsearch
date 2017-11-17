@@ -1,17 +1,33 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
 	"sort"
 	"strings"
 	"time"
 
+	_ "net/http/pprof"
+
 	avl "./avltree"
 	"./config"
+	"github.com/r-medina/gmaj"
+	"github.com/r-medina/gmaj/gmajpb"
 )
+
+// P2P/DHT configuration
+var nodeConfig = struct {
+	id         string
+	addr       string
+	parentAddr string
+	debug      bool
+	pprofAddr  string
+}{id: "", addr: ":8888", parentAddr: "", debug: false, pprofAddr: ":9999"}
 
 func main() {
 	fmt.Printf("BPSearch v1.0.0\n\n")
@@ -22,6 +38,8 @@ func main() {
 
 	// load keywords from disk
 	// tree := avl.LoadFromDisk()
+
+	node := initNode()
 
 	// keywordStore, _ := tree.Get("soy")
 	// keyword, _ := keywordStore.(map[string]interface{})
@@ -43,21 +61,94 @@ func main() {
 	// time.Sleep(10000 * time.Millisecond)
 
 	// Run the HTTP server
+	go initHTTP()
+
+	// wait for Ctrl-C
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, os.Interrupt)
+	<-stop
+
+	// shutdown
+	log.Println("shutting down")
+	node.Shutdown()
+	elapsed := time.Since(start)
+	fmt.Printf("Time: %s", elapsed)
+}
+
+// Initialize the HTTP server
+func initHTTP() {
 	fmt.Println("Listening on http://localhost:3333/")
 	http.HandleFunc("/", handlerRoot)
 	http.HandleFunc("/search/", handlerSearch)
 	http.HandleFunc("/config-save/", handlerConfigSave)
 	http.HandleFunc("/config-load/", handlerConfigLoad)
 	http.ListenAndServe(":3333", nil)
-
-	elapsed := time.Since(start)
-	fmt.Printf("Time: %s", elapsed)
 }
 
+// Initialize local Chord Node
+func initNode() *gmaj.Node {
+	// add parent to node
+	var parent *gmajpb.Node
+	if nodeConfig.parentAddr != "" {
+		conn, err := gmaj.Dial(nodeConfig.parentAddr)
+		if err != nil {
+			log.Fatalf("dialing parent %v failed: %v", nodeConfig.parentAddr, err)
+		}
+
+		client := gmajpb.NewGMajClient(conn)
+		id, err := client.GetID(context.Background(), &gmajpb.GetIDRequest{})
+		_ = conn.Close()
+		if err != nil {
+			log.Fatalf("getting parent ID failed: %v", err)
+		}
+
+		parent = &gmajpb.Node{Id: id.Id, Addr: nodeConfig.parentAddr}
+		log.Printf("attaching to %v", gmaj.IDToString(parent.Id))
+	}
+
+	var opts []gmaj.NodeOption
+	opts = append(opts, gmaj.WithAddress(nodeConfig.addr))
+
+	// add ID to node
+	if nodeConfig.id != "" {
+		id, err := gmaj.NewID(nodeConfig.id)
+		if err != nil {
+			log.Fatalf("parsing ID failed: %v", err)
+		}
+		opts = append(opts, gmaj.WithID(id))
+	}
+
+	// create node
+	node, err := gmaj.NewNode(parent, opts...)
+	if err != nil {
+		log.Fatalf("faild to instantiate node: %v", err)
+	}
+
+	log.Printf("%+v", node)
+
+	if nodeConfig.debug {
+		gmaj.Put(node, "aaa", []byte("val123"))
+		node.PutKeyVal(context.Background(), &gmajpb.KeyVal{Key: "bbb", Val: []byte("alex")})
+
+		go func() {
+			for range time.Tick(5 * time.Second) {
+				log.Println(node)
+				log.Println(node.DatastoreString())
+				val, _ := gmaj.Get(node, "bbb")
+				log.Println(string(val))
+			}
+		}()
+	}
+
+	return node
+}
+
+// Handle root route
 func handlerRoot(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Welcome to BPSearch v1.0.0")
 }
 
+// Handle search route
 func handlerSearch(w http.ResponseWriter, r *http.Request) {
 	// load keywords from disk
 	tree := avl.LoadFromDisk()
@@ -98,6 +189,7 @@ func handlerSearch(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, string(b))
 }
 
+// Handle saving config route
 func handlerConfigSave(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	settings := config.Load()
@@ -108,6 +200,7 @@ func handlerConfigSave(w http.ResponseWriter, r *http.Request) {
 	config.Save(settings)
 }
 
+// Handle loading config route
 func handlerConfigLoad(w http.ResponseWriter, r *http.Request) {
 	settings := config.LoadJSON()
 	fmt.Fprintf(w, settings)
