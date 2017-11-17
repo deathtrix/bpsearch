@@ -18,6 +18,7 @@ import (
 	"./config"
 	"github.com/r-medina/gmaj"
 	"github.com/r-medina/gmaj/gmajpb"
+	"github.com/sajari/fuzzy"
 )
 
 // P2P/DHT configuration
@@ -152,6 +153,17 @@ func handlerRoot(w http.ResponseWriter, r *http.Request) {
 func handlerSearch(w http.ResponseWriter, r *http.Request) {
 	// load keywords from disk
 	tree := avl.LoadFromDisk()
+
+	model := fuzzy.NewModel()
+	model.SetThreshold(1) // For testing only, this is not advisable on production
+	model.SetDepth(5)
+	// TODO: get an array of all words from tree or separate dictionary ???
+	words := []string{"bob", "your", "uncle", "dynamite", "delicate", "biggest", "big", "bigger", "aunty", "you're"}
+	model.Train(words)
+	model.TrainWord("single")
+
+	// TODO: for every word submitted - replace with spellchecked version
+	// model.SpellCheck("uncel")
 
 	keyString := r.URL.Query().Get("keywords")
 	keywords := strings.Split(keyString, " ")

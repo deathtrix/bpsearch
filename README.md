@@ -1,8 +1,7 @@
 TODO
 -----
    - local
-      - add symspell to search - fuzzy.Suggestions() - https://github.com/sajari/fuzzy
-      - save keywords in AVL with hash key (SHA1), electron - sha1(keyword) before searching (on server /search/)
+      - TODO symspell to search
    - P2P
       - DHT - test multiple peers, choose, add to project (subdir dht), integrate in main.go
       - replace storage with AVL
@@ -11,6 +10,8 @@ TODO
       - serve static files from electron
       - modify static files address and port to access proxy
    - refactor
+      - auto-complete - JS, route using symspell (model.Autocomplete())
+      - save keywords in AVL with hash key (SHA1), electron - sha1(keyword) before searching (on server /search/)
       - change AVL serialization (http://www.geeksforgeeks.org/serialize-deserialize-binary-tree/, https://www.cs.usfca.edu/~brooks/S04classes/cs245/lectures/lecture11.pdf)
       - check for duplicate links in Crawler
       - merge different forms of the same word ('work', 'works', 'worked', etc.) - use fuzzy.SpellCheck()
