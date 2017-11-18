@@ -28,7 +28,7 @@ var nodeConfig = struct {
 	parentAddr string
 	debug      bool
 	pprofAddr  string
-}{id: "", addr: ":8888", parentAddr: "", debug: false, pprofAddr: ":9999"}
+}{id: "", addr: ":9988", parentAddr: "", debug: false, pprofAddr: ":9999"}
 
 func main() {
 	fmt.Printf("BPSearch v1.0.0\n\n")
@@ -154,16 +154,13 @@ func handlerSearch(w http.ResponseWriter, r *http.Request) {
 	// load keywords from disk
 	tree := avl.LoadFromDisk()
 
+	// Symspell initialization to spellcheck keywords
 	model := fuzzy.NewModel()
 	model.SetThreshold(1) // For testing only, this is not advisable on production
 	model.SetDepth(5)
-	// TODO: get an array of all words from tree or separate dictionary ???
-	words := []string{"bob", "your", "uncle", "dynamite", "delicate", "biggest", "big", "bigger", "aunty", "you're"}
+	words := tree.KeysString()
 	model.Train(words)
 	model.TrainWord("single")
-
-	// TODO: for every word submitted - replace with spellchecked version
-	// model.SpellCheck("uncel")
 
 	keyString := r.URL.Query().Get("keywords")
 	keywords := strings.Split(keyString, " ")
@@ -173,6 +170,7 @@ func handlerSearch(w http.ResponseWriter, r *http.Request) {
 	hack := map[float64]string{}
 	pagesKeys := []float64{}
 	for _, keyword := range keywords {
+		keyword = model.SpellCheck(keyword)
 		keywordStore, _ := tree.Get(keyword)
 		urls, _ := keywordStore.(map[string]interface{})
 		for k, v := range urls {

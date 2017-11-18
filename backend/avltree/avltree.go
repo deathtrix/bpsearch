@@ -106,6 +106,16 @@ func (t *Tree) Keys() []interface{} {
 	return keys
 }
 
+// KeysString returns all keys in-order
+func (t *Tree) KeysString() []string {
+	keys := make([]string, t.size)
+	it := t.Iterator()
+	for i := 0; it.Next(); i++ {
+		keys[i] = it.Key().(string)
+	}
+	return keys
+}
+
 // Values returns all values in-order based on the key.
 func (t *Tree) Values() []interface{} {
 	values := make([]interface{}, t.size)
