@@ -156,7 +156,7 @@ func initNode() *gmaj.Node {
 
 // Handle root route
 func handlerRoot(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Welcome to BPSearch v1.0.0")
+	fmt.Fprintf(w, "Welcome to BPSearch v1.0.6")
 }
 
 // Handle search route
