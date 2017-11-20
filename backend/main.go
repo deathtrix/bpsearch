@@ -18,8 +18,8 @@ import (
 
 	avl "./avltree"
 	"./config"
-	"github.com/r-medina/gmaj"
-	"github.com/r-medina/gmaj/gmajpb"
+	"./gmaj"
+	"./gmaj/gmajpb"
 	"github.com/sajari/fuzzy"
 )
 

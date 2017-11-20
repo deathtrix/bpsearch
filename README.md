@@ -1,7 +1,6 @@
 TODO
 -----
    - P2P
-      - serialize/deserialize for DHT
       - add to project (subdir dht)
       - replace storage with AVL
       - test multiple peers

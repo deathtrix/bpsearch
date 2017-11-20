@@ -12,8 +12,8 @@ import (
 	"unicode"
 
 	"../config"
+	"../gmaj"
 	"github.com/k4s/phantomgo"
-	"github.com/r-medina/gmaj"
 )
 
 // type Score struct {
