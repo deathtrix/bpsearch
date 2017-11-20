@@ -1,6 +1,8 @@
 package indexer
 
 import (
+	"bytes"
+	"encoding/gob"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -65,19 +67,27 @@ func index(urlStr string, node *gmaj.Node) {
 
 	for word, score := range scores {
 		oldByte, _ := gmaj.Get(node, word)
-		// TODO: deserialize []byte to map[string]interface{}
-		old := deserialize(oldByte)
-
-		urlMap := Scores{}
-		if t, ok := old.(Scores); ok {
-			urlMap = t
+		var old Scores
+		b := bytes.NewBuffer(oldByte)
+		d := gob.NewDecoder(b)
+		err := d.Decode(&old)
+		if err != nil {
+			log.Println(err)
+			continue
 		}
+
+		urlMap := old
 		urlMap[urlStr] = score
 
 		// Save results to DHT
-		// TODO: serialize map[string]interface{} to []byte
-		urlMapSerialized := serialize(urlMap)
-		gmaj.Put(node, word, []byte(urlMapSerialized))
+		b = new(bytes.Buffer)
+		e := gob.NewEncoder(b)
+		err = e.Encode(urlMap)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		gmaj.Put(node, word, b.Bytes())
 	}
 }
 

@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"context"
+	"encoding/gob"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -20,6 +22,12 @@ import (
 	"github.com/r-medina/gmaj/gmajpb"
 	"github.com/sajari/fuzzy"
 )
+
+// Scores struct
+type Scores map[string]float64
+
+// Keymap struct
+type Keymap map[string]Scores
 
 // P2P/DHT configuration
 var nodeConfig = struct {
@@ -179,12 +187,16 @@ func handlerSearch(w http.ResponseWriter, r *http.Request) {
 
 		// Read from DHT
 		keywordByte, _ := gmaj.Get(node, keyword)
-		// TODO: deserialize []byte to map[string]interface{}
-		keywordStore := deserialize(keywordByte)
-		urls, _ := keywordStore.(map[string]interface{})
+		var urls Scores
+		b := bytes.NewBuffer(keywordByte)
+		d := gob.NewDecoder(b)
+		err := d.Decode(&urls)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
 		for k, v := range urls {
-			score, _ := v.(float64)
-			pages[k] += score
+			pages[k] += v
 		}
 	}
 
