@@ -1,5 +1,6 @@
-TODO
------
+# BPSearch
+
+### TODO
    - P2P
       - replace gmaj storage with AVL trees
       - test multiple peers
@@ -13,13 +14,13 @@ TODO
       - encrypt peer transfer
       - add tests for crawler, indexer, storage
 
-Docs
------
+### Docs
    - http://www.yacy-websearch.net/wiki/index.php/En:FAQ
    - http://blog.notdot.net/2009/11/Implementing-a-DHT-in-Go-part-1
    - http://blog.notdot.net/2009/11/Implementing-a-DHT-in-Go-part-2
    - http://cs.brown.edu/courses/cs138/s17/syllabus.html
    - http://cs.brown.edu/courses/cs138/s17/content/projects/chord.pdf
+   - https://pdos.csail.mit.edu/papers/chord:sigcomm01/chord_sigcomm.pdf
    - https://medium.com/@sent0hil/consistent-hashing-a-guide-go-implementation-fe3421ac3e8f
    - https://www.slideshare.net/jsimnz/chord-dht
    - https://blog.savoirfairelinux.com/en-ca/2015/ring-opendht-a-distributed-hash-table/
@@ -33,27 +34,23 @@ Docs
    - https://github.com/prettymuchbryce/kademlia
    - https://github.com/nictuku/dht
 
-Docs src
------
+### Docs src
    - https://github.com/automenta/kelondro
    - https://github.com/yacy/yacy_search_server/blob/8303e15419e789cad94b94a1d65e00f9627cd5f1/source/net/yacy/search/query/SearchEvent.java
    - https://github.com/yacy/yacy_search_server/blob/dd9cb06d250d8bbfc798c23ab8779a92018557f1/source/net/yacy/kelondro/data/word/WordReferenceVars.java
 
-Headless browser
------
+### Headless browser
    - https://github.com/k4s/phantomgo
    - https://github.com/PuerkitoBio/goquery - misses functions to get element attributes
 
-Use
------
+### Use
    - DHT - Chord
    - symspell - handle search errors - https://github.com/sajari/fuzzy
    - crawler
    - indexer (Bleve, https://github.com/nassor/studies-blevesearch ???)
    - storage: AVL trees
 
-Benefits
------
+### Benefits
    - concurrent crawler
    - binary protocol (custom, protobuf ???)
    - distributed
@@ -76,7 +73,6 @@ Benefits
    - must work on many environments (linux, osx, win, mobile???)
    - easy to use
 
-Build
------
+### Build
    - frontend: npm run package-win / electron-packager .
    - backend: go build main.go
