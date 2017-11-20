@@ -1,5 +1,6 @@
 TODO
 -----
+   - pages - array unique
    - P2P
       - DHT - test multiple peers, choose, add to project (subdir dht), integrate in main.go
       - replace storage with AVL
