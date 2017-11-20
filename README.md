@@ -1,13 +1,8 @@
 TODO
 -----
    - P2P
-      - add to project (subdir dht)
-      - replace storage with AVL
+      - replace gmaj storage with AVL trees
       - test multiple peers
-   - search tunnel
-      - nginx reverse proxy for go webserver
-      - serve static files from electron
-      - modify static files address and port to access proxy
    - refactor
       - auto-complete - JS, route using symspell (model.Autocomplete())
       - save keywords in AVL with hash key (SHA1), electron - sha1(keyword) before searching (on server /search/)
@@ -38,27 +33,26 @@ Docs
    - https://github.com/prettymuchbryce/kademlia
    - https://github.com/nictuku/dht
 
-Docs headless browser
------
-   - https://github.com/k4s/phantomgo
-   - https://github.com/PuerkitoBio/goquery - misses functions to get element attributes
-
 Docs src
 -----
    - https://github.com/automenta/kelondro
    - https://github.com/yacy/yacy_search_server/blob/8303e15419e789cad94b94a1d65e00f9627cd5f1/source/net/yacy/search/query/SearchEvent.java
    - https://github.com/yacy/yacy_search_server/blob/dd9cb06d250d8bbfc798c23ab8779a92018557f1/source/net/yacy/kelondro/data/word/WordReferenceVars.java
 
+Headless browser
+-----
+   - https://github.com/k4s/phantomgo
+   - https://github.com/PuerkitoBio/goquery - misses functions to get element attributes
 
 Use
 -----
-   - DHT (Chord ???)
-   - symspell - handle search errors (https://github.com/sajari/fuzzy)
+   - DHT - Chord
+   - symspell - handle search errors - https://github.com/sajari/fuzzy
    - crawler
    - indexer (Bleve, https://github.com/nassor/studies-blevesearch ???)
    - storage: AVL trees
 
-Sell points
+Benefits
 -----
    - concurrent crawler
    - binary protocol (custom, protobuf ???)
@@ -84,5 +78,5 @@ Sell points
 
 Build
 -----
-   - frontend: electron-packager .
+   - frontend: npm run package-win / electron-packager .
    - backend: go build main.go
