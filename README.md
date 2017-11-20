@@ -1,9 +1,12 @@
 # BPSearch
 
 ### TODO
+   - rename out file -> store in code, delete out
    - P2P
       - replace gmaj storage with AVL trees
       - test multiple peers
+   - make github website
+   - make first release
    - refactor
       - auto-complete - JS, route using symspell (model.Autocomplete())
       - save keywords in AVL with hash key (SHA1), electron - sha1(keyword) before searching (on server /search/)
