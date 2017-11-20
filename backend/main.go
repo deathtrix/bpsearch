@@ -29,6 +29,7 @@ var nodeConfig = struct {
 	debug      bool
 	pprofAddr  string
 }{id: "", addr: ":9988", parentAddr: "", debug: false, pprofAddr: ":9999"}
+var node *gmaj.Node
 
 func main() {
 	fmt.Printf("BPSearch v1.0.0\n\n")
@@ -40,7 +41,7 @@ func main() {
 	// load keywords from disk
 	// tree := avl.LoadFromDisk()
 
-	node := initNode()
+	node = initNode()
 
 	// keywordStore, _ := tree.Get("soy")
 	// keyword, _ := keywordStore.(map[string]interface{})
@@ -127,9 +128,10 @@ func initNode() *gmaj.Node {
 
 	log.Printf("%+v", node)
 
+	// TODO: remove
 	if nodeConfig.debug {
-		gmaj.Put(node, "aaa", []byte("val123"))
-		node.PutKeyVal(context.Background(), &gmajpb.KeyVal{Key: "bbb", Val: []byte("alex")})
+		// gmaj.Put(node, "aaa", []byte("val123"))
+		// node.PutKeyVal(context.Background(), &gmajpb.KeyVal{Key: "bbb", Val: []byte("alex")})
 
 		go func() {
 			for range time.Tick(5 * time.Second) {
@@ -171,7 +173,14 @@ func handlerSearch(w http.ResponseWriter, r *http.Request) {
 	pagesKeys := []float64{}
 	for _, keyword := range keywords {
 		keyword = model.SpellCheck(keyword)
-		keywordStore, _ := tree.Get(keyword)
+		// Read from tree
+		// keywordStore, _ := tree.Get(keyword)
+		// urls, _ := keywordStore.(map[string]interface{})
+
+		// Read from DHT
+		keywordByte, _ := gmaj.Get(node, keyword)
+		// TODO: deserialize []byte to map[string]interface{}
+		keywordStore := deserialize(keywordByte)
 		urls, _ := keywordStore.(map[string]interface{})
 		for k, v := range urls {
 			score, _ := v.(float64)

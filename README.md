@@ -1,9 +1,10 @@
 TODO
 -----
-   - pages - array unique
    - P2P
-      - DHT - test multiple peers, choose, add to project (subdir dht), integrate in main.go
+      - serialize/deserialize for DHT
+      - add to project (subdir dht)
       - replace storage with AVL
+      - test multiple peers
    - search tunnel
       - nginx reverse proxy for go webserver
       - serve static files from electron

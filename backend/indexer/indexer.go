@@ -10,8 +10,8 @@ import (
 	"unicode"
 
 	"../config"
-	"../interfaces"
 	"github.com/k4s/phantomgo"
+	"github.com/r-medina/gmaj"
 )
 
 // type Score struct {
@@ -27,11 +27,11 @@ type Scores map[string]float64
 type Keymap map[string]Scores
 
 // Start indexing the text
-func Start(store interfaces.StoreInterface, ch <-chan string) {
+func Start(node *gmaj.Node, ch <-chan string) {
 	for {
 		select {
 		case urlStr := <-ch:
-			index(urlStr, store)
+			index(urlStr, node)
 			// case <-time.After(3 * time.Second):
 			// 	break
 		}
@@ -54,7 +54,7 @@ func getPageContent(urlStr string) map[string]int {
 	return cnt
 }
 
-func index(urlStr string, store interfaces.StoreInterface) {
+func index(urlStr string, node *gmaj.Node) {
 	var scores map[string]float64
 	scoresJSON := parseHTML(urlStr)
 	err := json.Unmarshal(scoresJSON, &scores)
@@ -64,25 +64,21 @@ func index(urlStr string, store interfaces.StoreInterface) {
 	fmt.Printf("%-v\n", scores)
 
 	for word, score := range scores {
-		old, _ := store.Get(word)
+		oldByte, _ := gmaj.Get(node, word)
+		// TODO: deserialize []byte to map[string]interface{}
+		old := deserialize(oldByte)
 
-		// var urlMap = make(map[string]interface{})
-		// if old != nil {
-		// 	urlMap = old.(map[string]interface{})
-		// }
-		// urlMap[urlStr] = score
-
-		// use structs - problems with AVL serialization
 		urlMap := Scores{}
 		if t, ok := old.(Scores); ok {
 			urlMap = t
 		}
 		urlMap[urlStr] = score
 
-		store.Put(word, urlMap)
+		// Save results to DHT
+		// TODO: serialize map[string]interface{} to []byte
+		urlMapSerialized := serialize(urlMap)
+		gmaj.Put(node, word, []byte(urlMapSerialized))
 	}
-
-	store.SaveToDisk()
 }
 
 func wordCount(s string) map[string]int {
