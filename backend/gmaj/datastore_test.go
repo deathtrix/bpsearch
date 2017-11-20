@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"./gmaj/gmajpb"
+	"./gmajpb"
 )
 
 func TestGetNilNode(t *testing.T) {

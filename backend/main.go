@@ -40,7 +40,7 @@ var nodeConfig = struct {
 var node *gmaj.Node
 
 func main() {
-	fmt.Printf("BPSearch v1.0.0\n\n")
+	fmt.Printf("BPSearch v1.0.6\n\n")
 	start := time.Now()
 
 	// load settings

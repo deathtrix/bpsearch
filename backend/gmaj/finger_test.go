@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"./gmaj/gmajpb"
+	"./gmajpb"
 )
 
 func TestInitFingerTable(t *testing.T) {
