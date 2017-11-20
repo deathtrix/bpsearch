@@ -34,7 +34,7 @@ var nodeConfig = struct {
 	id         string
 	addr       string
 	parentAddr string
-	debug      bool
+	debug      bool // TODO: remove
 	pprofAddr  string
 }{id: "", addr: ":9988", parentAddr: "", debug: false, pprofAddr: ":9999"}
 var node *gmaj.Node
