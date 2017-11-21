@@ -466,7 +466,7 @@ func output(node *Node, prefix string, isTail bool, str *string) {
 // LoadFromDisk function
 func LoadFromDisk() *Tree {
 	tree := NewWithStringComparator()
-	b := Load("out")
+	b := Load("db")
 	json := Decompress(b)
 	tree.FromJSON(json)
 
@@ -477,7 +477,7 @@ func LoadFromDisk() *Tree {
 func (t *Tree) SaveToDisk() {
 	json, _ := t.ToJSON()
 	b := Compress(json)
-	Save("out", b.Bytes())
+	Save("db", b.Bytes())
 }
 
 // Compress AVL tree

@@ -1,7 +1,6 @@
 # BPSearch
 
 ### TODO
-   - rename out file -> store in code, delete out
    - P2P
       - replace gmaj storage with AVL trees
       - test multiple peers

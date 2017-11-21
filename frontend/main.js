@@ -1,5 +1,5 @@
 const electron = require('electron')
-const {Menu, MenuItem} = electron
+const {Menu, MenuItem, globalShortcut} = electron
 // Module to control application life.
 const app = electron.app
 // Module to create native browser window.
@@ -55,29 +55,16 @@ function createWindow () {
   ];
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
   Menu.setApplicationMenu(mainMenu);
-  
-  function getSettingsWindow() {
-    mainWindow.loadURL(url.format({
-      pathname: path.join(__dirname, 'settings.html'),
-      protocol: 'file:',
-      slashes: true
-    }));
-  }
 
-  function getSearchWindow() {
-    mainWindow.loadURL(url.format({
-      pathname: path.join(__dirname, 'index.html'),
-      protocol: 'file:',
-      slashes: true
-    }));
-  }
-
-  // and load the index.html of the app.
+   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, 'index.html'),
     protocol: 'file:',
     slashes: true
   }));
+
+  // Backspace for previous page
+  globalShortcut.register('Backspace', () => backspaceEvent());
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
@@ -93,6 +80,28 @@ function createWindow () {
   mainWindow.once('ready-to-show', () => {
     mainWindow.show()
   });
+}
+
+var backspaceEvent = function() {
+  // mainWindow.webContents.goBack();
+  mainWindow.webContents.executeJavaScript(
+    'if (["input", "textarea"].indexOf(document.activeElement.tagName.toLowerCase()) <= -1) {window.history.back()} else {document.activeElement.value = document.activeElement.value.slice(0, -1)};');
+}
+
+function getSettingsWindow() {
+  mainWindow.loadURL(url.format({
+    pathname: path.join(__dirname, 'settings.html'),
+    protocol: 'file:',
+    slashes: true
+  }));
+}
+
+function getSearchWindow() {
+  mainWindow.loadURL(url.format({
+    pathname: path.join(__dirname, 'index.html'),
+    protocol: 'file:',
+    slashes: true
+  }));
 }
 
 // This method will be called when Electron has finished
