@@ -2,8 +2,8 @@
 
 ### TODO
    - P2P
+      - test storage on multiple peers
       - replace gmaj storage with AVL trees
-      - test multiple peers
    - make github website
    - make first release
    - refactor
